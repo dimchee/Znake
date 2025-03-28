@@ -13,18 +13,18 @@ pub fn build(b: *std.Build) void {
         // .gl = true,
     });
     if (target.result.cpu.arch.isWasm()) {
-        const snake = b.addStaticLibrary(.{
-            .name = "Snake",
+        const znake = b.addStaticLibrary(.{
+            .name = "znake",
             .target = target,
             .optimize = optimize,
             .root_source_file = b.path("src/main.zig"),
         });
-        snake.root_module.addImport("sokol", dep_sokol.module("sokol"));
+        znake.root_module.addImport("sokol", dep_sokol.module("sokol"));
 
         // create a build step which invokes the Emscripten linker
         const emsdk = dep_sokol.builder.dependency("emsdk", .{});
         const link_step = try sokol.emLinkStep(b, .{
-            .lib_main = snake,
+            .lib_main = znake,
             .target = target,
             .optimize = optimize,
             .emsdk = emsdk,
@@ -36,12 +36,12 @@ pub fn build(b: *std.Build) void {
         // attach Emscripten linker output to default install step
         b.getInstallStep().dependOn(&link_step.step);
         // ...and a special run step to start the web build output via 'emrun'
-        const run = sokol.emRunStep(b, .{ .name = "Snake", .emsdk = emsdk });
+        const run = sokol.emRunStep(b, .{ .name = "znake", .emsdk = emsdk });
         run.step.dependOn(&link_step.step);
-        b.step("run", "Run Snake").dependOn(&run.step);
+        b.step("run", "Run znake").dependOn(&run.step);
     } else {
         const exe = b.addExecutable(.{
-            .name = "Snake",
+            .name = "znake",
             .target = target,
             .optimize = optimize,
             .root_source_file = b.path("src/main.zig"),
