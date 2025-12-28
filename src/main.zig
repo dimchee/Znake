@@ -36,6 +36,6 @@ pub fn main() !void {
         .frame_cb = frame,
         .init_cb = init,
         .cleanup_cb = cleanup,
-        .window_title = "Snake",
+        .window_title = "Znake",
     });
 }
