@@ -1,7 +1,10 @@
 const std = @import("std");
 const sokol = @import("sokol");
+const shd = @import("quad.glsl.zig");
 
 const state = struct {
+    var bind: sokol.gfx.Bindings = .{};
+    var pip: sokol.gfx.Pipeline = .{};
     var pass_action: sokol.gfx.PassAction = .{};
 };
 
@@ -9,6 +12,15 @@ export fn init() void {
     sokol.gfx.setup(.{
         .environment = sokol.glue.environment(),
         .logger = .{ .func = sokol.log.func },
+    });
+    state.bind.vertex_buffers[0] = sokol.gfx.makeBuffer(.{
+        .data = sokol.gfx.asRange(&[_]f32{
+            // positions      colors
+            -0.5, 0.5,  0.5, 1.0, 0.0, 0.0, 1.0,
+            0.5,  0.5,  0.5, 0.0, 1.0, 0.0, 1.0,
+            0.5,  -0.5, 0.5, 0.0, 0.0, 1.0, 1.0,
+            -0.5, -0.5, 0.5, 1.0, 1.0, 0.0, 1.0,
+        }),
     });
     state.pass_action.colors[0] = .{
         .load_action = .CLEAR,
@@ -36,6 +48,6 @@ pub fn main() !void {
         .frame_cb = frame,
         .init_cb = init,
         .cleanup_cb = cleanup,
-        .window_title = "Snake",
+        .window_title = "Znake",
     });
 }
