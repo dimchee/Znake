@@ -15,6 +15,8 @@
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = [ 
           zig.packages.${system}."0.14.0" 
+          pkgs.clang
+          pkgs.nodejs
           pkgs.alsa-lib
           pkgs.libGL
           pkgs.wayland
